@@ -1,0 +1,431 @@
+import java.util.Scanner;
+
+public class MatricesFunciones {
+
+    public static void main(String[] args) {
+
+        Scanner ingresoDatos = new Scanner(System.in);
+
+        int filas = 0, columnas = 0;
+
+        do {
+            System.out.println("Digite el numero de filas:");
+            filas = Integer.parseInt(ingresoDatos.nextLine());
+        } while (filas <= 0);
+
+        do {
+            System.out.println("Digite el numero de columnas:");
+            columnas = Integer.parseInt(ingresoDatos.nextLine());
+        } while (columnas <= 0);
+
+        int[][] matrizEnterosA = new int[filas][columnas];
+        int[][] matrizEnterosB = new int[filas][columnas];
+        String[][] matrizTextos = new String[filas][columnas];
+        char[][] matrizCaracteres = new char[filas][columnas];
+
+        int opcion = 0;
+
+        do {
+            System.out.println("\n========== MENU MATRICES ==========");
+            System.out.println("1. Llenar matriz de enteros aleatoria");
+            System.out.println("2. Llenar matriz de caracteres aleatoria");
+            System.out.println("3. Llenar matriz de String manualmente");
+            System.out.println("4. Imprimir matriz de enteros");
+            System.out.println("5. Imprimir matriz de caracteres");
+            System.out.println("6. Imprimir matriz de String");
+            System.out.println("7. Sumar dos matrices enteras");
+            System.out.println("8. Restar dos matrices enteras");
+            System.out.println("9. Convertir matriz String a int[][]");
+            System.out.println("10. Convertir matriz String a double[][]");
+            System.out.println("11. Convertir matriz String a boolean[][]");
+            System.out.println("12. Convertir matriz String a char[][]");
+            System.out.println("13. Salir");
+            System.out.println("Digite una opcion:");
+
+            opcion = Integer.parseInt(ingresoDatos.nextLine());
+
+            switch (opcion) {
+
+                case 1:
+                    matrizEnterosA = llenarMatrizEnterosAleatoria(matrizEnterosA, 1, 50);
+                    matrizEnterosB = llenarMatrizEnterosAleatoria(matrizEnterosB, 1, 50);
+                    System.out.println("Matriz A:");
+                    imprimirMatrizEnteros(matrizEnterosA);
+                    System.out.println("Matriz B:");
+                    imprimirMatrizEnteros(matrizEnterosB);
+                    break;
+
+                case 2:
+                    matrizCaracteres = llenarMatrizCaracteresAleatoria(matrizCaracteres);
+                    imprimirMatrizCaracteres(matrizCaracteres);
+                    break;
+
+                case 3:
+                    matrizTextos = llenarMatrizString(matrizTextos, ingresoDatos);
+                    imprimirMatrizString(matrizTextos);
+                    break;
+
+                case 4:
+                    imprimirMatrizEnteros(matrizEnterosA);
+                    break;
+
+                case 5:
+                    imprimirMatrizCaracteres(matrizCaracteres);
+                    break;
+
+                case 6:
+                    imprimirMatrizString(matrizTextos);
+                    break;
+
+                case 7:
+                    int[][] suma = sumarMatrices(matrizEnterosA, matrizEnterosB);
+                    System.out.println("Resultado de la suma:");
+                    imprimirMatrizEnteros(suma);
+                    break;
+
+                case 8:
+                    int[][] resta = restarMatrices(matrizEnterosA, matrizEnterosB);
+                    System.out.println("Resultado de la resta:");
+                    imprimirMatrizEnteros(resta);
+                    break;
+
+                case 9:
+                    int[][] enteros = convertirStringAEnteros(matrizTextos);
+                    imprimirMatrizEnteros(enteros);
+                    break;
+
+                case 10:
+                    double[][] dobles = convertirStringADouble(matrizTextos);
+                    imprimirMatrizDouble(dobles);
+                    break;
+
+                case 11:
+                    boolean[][] booleanos = convertirStringABoolean(matrizTextos);
+                    imprimirMatrizBoolean(booleanos);
+                    break;
+
+                case 12:
+                    char[][] caracteres = convertirStringAChar(matrizTextos);
+                    imprimirMatrizCaracteres(caracteres);
+                    break;
+
+                case 13:
+                    System.out.println("Programa finalizado.");
+                    break;
+
+                default:
+                    System.out.println("Opcion incorrecta.");
+            }
+
+        } while (opcion != 13);
+
+        ingresoDatos.close();
+    }
+
+    /**
+     * Descripcion:
+     * Llena una matriz de enteros con numeros aleatorios dentro de un rango.
+     *
+     * Parametros:
+     * matriz -> matriz que sera llenada.
+     * minimo -> valor minimo permitido.
+     * maximo -> valor maximo permitido.
+     *
+     * Retorno:
+     * La matriz llena con numeros enteros aleatorios.
+     */
+    private static int[][] llenarMatrizEnterosAleatoria(int[][] matriz, int minimo, int maximo) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                matriz[fila][columna] = (int) (Math.random() * (maximo - minimo + 1)) + minimo;
+            }
+        }
+
+        return matriz;
+    }
+
+    /**
+     * Descripcion:
+     * Llena una matriz con caracteres aleatorios entre A y Z.
+     *
+     * Parametros:
+     * matriz -> matriz de caracteres que sera llenada.
+     *
+     * Retorno:
+     * La matriz llena con caracteres aleatorios.
+     */
+    private static char[][] llenarMatrizCaracteresAleatoria(char[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                matriz[fila][columna] = (char) ((int) (Math.random() * 26) + 65);
+            }
+        }
+
+        return matriz;
+    }
+
+    /**
+     * Descripcion:
+     * Llena una matriz de String con datos ingresados desde el main.
+     *
+     * Parametros:
+     * matriz -> matriz de String que sera llenada.
+     * ingresoDatos -> objeto Scanner creado en el main.
+     *
+     * Retorno:
+     * La matriz llena con cadenas de texto.
+     */
+    private static String[][] llenarMatrizString(String[][] matriz, Scanner ingresoDatos) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.println("Digite el valor para [" + fila + "][" + columna + "]:");
+                matriz[fila][columna] = ingresoDatos.nextLine();
+            }
+        }
+
+        return matriz;
+    }
+
+    /**
+     * Descripcion:
+     * Suma dos matrices enteras de igual dimension.
+     *
+     * Parametros:
+     * matrizA -> primera matriz.
+     * matrizB -> segunda matriz.
+     *
+     * Retorno:
+     * Una nueva matriz con la suma de ambas matrices.
+     */
+    private static int[][] sumarMatrices(int[][] matrizA, int[][] matrizB) {
+
+        int[][] resultado = new int[matrizA.length][matrizA[0].length];
+
+        for (int fila = 0; fila < matrizA.length; fila++) {
+            for (int columna = 0; columna < matrizA[fila].length; columna++) {
+                resultado[fila][columna] = matrizA[fila][columna] + matrizB[fila][columna];
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Resta dos matrices enteras de igual dimension.
+     *
+     * Parametros:
+     * matrizA -> primera matriz.
+     * matrizB -> segunda matriz.
+     *
+     * Retorno:
+     * Una nueva matriz con la resta matrizA - matrizB.
+     */
+    private static int[][] restarMatrices(int[][] matrizA, int[][] matrizB) {
+
+        int[][] resultado = new int[matrizA.length][matrizA[0].length];
+
+        for (int fila = 0; fila < matrizA.length; fila++) {
+            for (int columna = 0; columna < matrizA[fila].length; columna++) {
+                resultado[fila][columna] = matrizA[fila][columna] - matrizB[fila][columna];
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Convierte una matriz de String a una matriz de enteros.
+     *
+     * Parametros:
+     * matriz -> matriz de String que contiene numeros enteros como texto.
+     *
+     * Retorno:
+     * Una nueva matriz de enteros.
+     */
+    private static int[][] convertirStringAEnteros(String[][] matriz) {
+
+        int[][] resultado = new int[matriz.length][matriz[0].length];
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                resultado[fila][columna] = Integer.parseInt(matriz[fila][columna]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Convierte una matriz de String a una matriz de double.
+     *
+     * Parametros:
+     * matriz -> matriz de String que contiene numeros decimales como texto.
+     *
+     * Retorno:
+     * Una nueva matriz de double.
+     */
+    private static double[][] convertirStringADouble(String[][] matriz) {
+
+        double[][] resultado = new double[matriz.length][matriz[0].length];
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                resultado[fila][columna] = Double.parseDouble(matriz[fila][columna]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Convierte una matriz de String a una matriz de boolean.
+     *
+     * Parametros:
+     * matriz -> matriz de String que contiene true o false.
+     *
+     * Retorno:
+     * Una nueva matriz de boolean.
+     */
+    private static boolean[][] convertirStringABoolean(String[][] matriz) {
+
+        boolean[][] resultado = new boolean[matriz.length][matriz[0].length];
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                resultado[fila][columna] = Boolean.parseBoolean(matriz[fila][columna]);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Convierte una matriz de String a una matriz de char.
+     *
+     * Parametros:
+     * matriz -> matriz de String que contiene textos.
+     *
+     * Retorno:
+     * Una nueva matriz de caracteres usando el primer caracter de cada texto.
+     */
+    private static char[][] convertirStringAChar(String[][] matriz) {
+
+        char[][] resultado = new char[matriz.length][matriz[0].length];
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                resultado[fila][columna] = matriz[fila][columna].charAt(0);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Descripcion:
+     * Imprime una matriz de enteros.
+     *
+     * Parametros:
+     * matriz -> matriz que sera impresa.
+     *
+     * Retorno:
+     * Ninguno.
+     */
+    private static void imprimirMatrizEnteros(int[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.print(matriz[fila][columna] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Descripcion:
+     * Imprime una matriz de double.
+     *
+     * Parametros:
+     * matriz -> matriz que sera impresa.
+     *
+     * Retorno:
+     * Ninguno.
+     */
+    private static void imprimirMatrizDouble(double[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.print(matriz[fila][columna] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Descripcion:
+     * Imprime una matriz de boolean.
+     *
+     * Parametros:
+     * matriz -> matriz que sera impresa.
+     *
+     * Retorno:
+     * Ninguno.
+     */
+    private static void imprimirMatrizBoolean(boolean[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.print(matriz[fila][columna] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Descripcion:
+     * Imprime una matriz de caracteres.
+     *
+     * Parametros:
+     * matriz -> matriz que sera impresa.
+     *
+     * Retorno:
+     * Ninguno.
+     */
+    private static void imprimirMatrizCaracteres(char[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.print(matriz[fila][columna] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Descripcion:
+     * Imprime una matriz de String.
+     *
+     * Parametros:
+     * matriz -> matriz que sera impresa.
+     *
+     * Retorno:
+     * Ninguno.
+     */
+    private static void imprimirMatrizString(String[][] matriz) {
+
+        for (int fila = 0; fila < matriz.length; fila++) {
+            for (int columna = 0; columna < matriz[fila].length; columna++) {
+                System.out.print(matriz[fila][columna] + "\t");
+            }
+            System.out.println();
+        }
+    }
+}
